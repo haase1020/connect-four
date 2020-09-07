@@ -135,3 +135,28 @@ const row5 = [
   allCells[41],
 ];
 const rows = [row0, row1, row2, row3, row4, row5, topRow];
+
+//variables
+let gameIsLive = true;
+let yellowIsNext = true;
+
+// functions
+const getClassListArray = (cell) => {
+  const classList = cell.classList;
+  return [...classList];
+};
+
+//event handlers
+const handleCellMouseOver = (e) => {
+  const cell = e.target;
+
+  const classList = getClassListArray(cell);
+  console.log(classList);
+};
+
+//adding event listeners
+for (const row of rows) {
+  for (const cell of row) {
+    cell.addEventListener('mouseover', handleCellMouseOver);
+  }
+}
