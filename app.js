@@ -162,7 +162,73 @@ const getCellLocation = (cell) => {
 const getFirstOpenCellForColumn = (colIndex) => {
   const column = columns[colIndex];
   const columnWithoutTop = column.slice(0, 6);
-  console.log(columnWithoutTop);
+
+  for (const cell of columnWithoutTop) {
+    const classList = getClassListArray(cell);
+    if (!classList.includes('yellow') && !classList.includes('red')) {
+      return cell;
+    }
+  }
+
+  return null;
+};
+
+const clearColorFromTop = (colIndex) => {
+  const topCell = topCells[colIndex];
+  topCell.classList.remove('yellow');
+  topCell.classList.remove('red');
+};
+
+const getColorofCell = (cell) => {
+  const classList = getClassListArray(cell);
+  if (classList.includes('yellow')) return 'yellow';
+  if (classList.includes('red')) return 'red';
+};
+
+const checkWinningCells = (cells) => {
+  if (cells.length < 4) return;
+
+  gameIsLive = false;
+  for (const cell of cells) {
+    cell.classList.add('win');
+  }
+  statusSpan.textContent = `${yellowIsNext ? 'Yellow' : 'Red'} has won!`;
+};
+
+const checkStatusOfGame = (cell) => {
+  const color = getColorofCell(cell);
+  if (!color) return;
+  const [rowIndex, colIndex] = getCellLocation(cell);
+
+  // check horizontally
+  let winningCells = [cell];
+  let rowToCheck = rowIndex;
+  let colToCheck = colIndex - 1;
+  while (colToCheck >= 0) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorofCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      colToCheck--;
+    } else {
+      break;
+    }
+  }
+  colToCheck = colIndex + 1;
+  while (colToCheck <= 6) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorofCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      colToCheck++;
+    } else {
+      break;
+    }
+  }
+
+  checkWinningCells(winningCells);
+
+  if (winningCells.length > 4) {
+    gameIsLive = false;
+  }
 };
 
 //event handlers
@@ -177,16 +243,25 @@ const handleCellMouseOver = (e) => {
 const handleCellMouseOut = (e) => {
   const cell = e.target;
   const [rowIndex, colIndex] = getCellLocation(cell);
-  const topCell = topCells[colIndex];
-  topCell.classList.remove('yellow');
-  topCell.classList.remove('red');
+  clearColorFromTop(colIndex);
 };
 
 const handleCellClick = (e) => {
   const cell = e.target;
   const [rowIndex, colIndex] = getCellLocation(cell);
 
-  getFirstOpenCellForColumn(colIndex);
+  const openCell = getFirstOpenCellForColumn(colIndex);
+
+  if (!openCell) return;
+
+  openCell.classList.add(yellowIsNext ? 'yellow' : 'red');
+
+  checkStatusOfGame(openCell);
+
+  yellowIsNext = !yellowIsNext;
+  clearColorFromTop(colIndex);
+  const topCell = topCells[colIndex];
+  topCell.classList.add(yellowIsNext ? 'yellow' : 'red');
 };
 
 //adding event listeners
