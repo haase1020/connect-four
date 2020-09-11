@@ -272,3 +272,15 @@ for (const row of rows) {
     cell.addEventListener('click', handleCellClick);
   }
 }
+resetButton.addEventListener('click', () => {
+  for (const row of rows) {
+    for (const cell of row) {
+      cell.classList.remove('red');
+      cell.classList.remove('yellow');
+      cell.classList.remove('win');
+    }
+  }
+  gameIsLive = true;
+  yellowIsNext = true;
+  statusSpan.textContent = '';
+});
