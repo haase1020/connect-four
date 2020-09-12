@@ -186,13 +186,15 @@ const getColorofCell = (cell) => {
 };
 
 const checkWinningCells = (cells) => {
-  if (cells.length < 4) return;
+  if (cells.length < 4) return false;
 
   gameIsLive = false;
   for (const cell of cells) {
     cell.classList.add('win');
   }
   statusSpan.textContent = `${yellowIsNext ? 'Yellow' : 'Red'} has won!`;
+
+  return true;
 };
 
 const checkStatusOfGame = (cell) => {
@@ -224,12 +226,71 @@ const checkStatusOfGame = (cell) => {
     }
   }
 
-  checkWinningCells(winningCells);
+  let isWinningCombo = checkWinningCells(winningCells);
+  if (isWinningCombo) return;
 
-  if (winningCells.length > 4) {
-    gameIsLive = false;
+  // check vertically
+  winningCells = [cell];
+  rowToCheck = rowIndex - 1;
+  colToCheck = colIndex;
+  while (rowToCheck >= 0) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorofCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      rowToCheck--;
+    } else {
+      break;
+    }
   }
+  rowToCheck = rowIndex + 1;
+  while (rowToCheck <= 5) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorofCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      rowToCheck++;
+    } else {
+      break;
+    }
+  }
+
+  isWinningCombo = checkWinningCells(winningCells);
+  if (isWinningCombo) return;
+
+  
 };
+
+// check diagonally
+winningCells = [cell];
+rowToCheck = rowIndex + 1;
+colToCheck = colIndex - 1;
+while (colToCheck >= 0 && rowToCheck <= 5) {
+  const cellToCheck = rows[rowToCheck][colToCheck];
+  if (getColorofCell(cellToCheck) === color) {
+    winningCells.push(cellToCheck);
+    rowToCheck++;
+    colToCheck--;
+  } else {
+    break;
+  }
+}
+rowToCheck = rowIndex - 1;
+colToCheck = colIndex + 1;
+while (colToCheck <= 6 && rowToCheck >= 0) {
+  const cellToCheck = rows[rowToCheck][colToCheck];
+  if (getColorofCell(cellToCheck) === color) {
+    winningCells.push(cellToCheck);
+    rowToCheck--;
+    colToCheck++;
+  } else {
+    break;
+  }
+}
+isWinningCombo = checkWinningCells(winningCells);
+if (isWinningCombo) return;
+};
+if (winningCells.length > 4) {
+  gameIsLive = false;
+}
 
 //event handlers
 const handleCellMouseOver = (e) => {
