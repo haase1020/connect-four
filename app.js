@@ -262,8 +262,10 @@ const handleCellClick = (e) => {
 
   yellowIsNext = !yellowIsNext;
   clearColorFromTop(colIndex);
-  const topCell = topCells[colIndex];
-  topCell.classList.add(yellowIsNext ? 'yellow' : 'red');
+  if (gameIsLive) {
+    const topCell = topCells[colIndex];
+    topCell.classList.add(yellowIsNext ? 'yellow' : 'red');
+  }
 };
 
 //adding event listeners
