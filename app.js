@@ -136,14 +136,14 @@ const row5 = [
 ];
 const rows = [row0, row1, row2, row3, row4, row5, topRow];
 
-//variables
+// variables
 let gameIsLive = true;
 let yellowIsNext = true;
 
-// functions
+// Functions
 const getClassListArray = (cell) => {
   const classList = cell.classList;
-  return [...classList]; ///separates into comma separated values
+  return [...classList];
 };
 
 const getCellLocation = (cell) => {
@@ -179,10 +179,11 @@ const clearColorFromTop = (colIndex) => {
   topCell.classList.remove('red');
 };
 
-const getColorofCell = (cell) => {
+const getColorOfCell = (cell) => {
   const classList = getClassListArray(cell);
   if (classList.includes('yellow')) return 'yellow';
   if (classList.includes('red')) return 'red';
+  return null;
 };
 
 const checkWinningCells = (cells) => {
@@ -193,22 +194,21 @@ const checkWinningCells = (cells) => {
     cell.classList.add('win');
   }
   statusSpan.textContent = `${yellowIsNext ? 'Yellow' : 'Red'} has won!`;
-
   return true;
 };
 
 const checkStatusOfGame = (cell) => {
-  const color = getColorofCell(cell);
+  const color = getColorOfCell(cell);
   if (!color) return;
   const [rowIndex, colIndex] = getCellLocation(cell);
 
-  // check horizontally
+  // Check horizontally
   let winningCells = [cell];
   let rowToCheck = rowIndex;
   let colToCheck = colIndex - 1;
   while (colToCheck >= 0) {
     const cellToCheck = rows[rowToCheck][colToCheck];
-    if (getColorofCell(cellToCheck) === color) {
+    if (getColorOfCell(cellToCheck) === color) {
       winningCells.push(cellToCheck);
       colToCheck--;
     } else {
@@ -218,24 +218,23 @@ const checkStatusOfGame = (cell) => {
   colToCheck = colIndex + 1;
   while (colToCheck <= 6) {
     const cellToCheck = rows[rowToCheck][colToCheck];
-    if (getColorofCell(cellToCheck) === color) {
+    if (getColorOfCell(cellToCheck) === color) {
       winningCells.push(cellToCheck);
       colToCheck++;
     } else {
       break;
     }
   }
-
   let isWinningCombo = checkWinningCells(winningCells);
   if (isWinningCombo) return;
 
-  // check vertically
+  // Check vertically
   winningCells = [cell];
   rowToCheck = rowIndex - 1;
   colToCheck = colIndex;
   while (rowToCheck >= 0) {
     const cellToCheck = rows[rowToCheck][colToCheck];
-    if (getColorofCell(cellToCheck) === color) {
+    if (getColorOfCell(cellToCheck) === color) {
       winningCells.push(cellToCheck);
       rowToCheck--;
     } else {
@@ -245,54 +244,90 @@ const checkStatusOfGame = (cell) => {
   rowToCheck = rowIndex + 1;
   while (rowToCheck <= 5) {
     const cellToCheck = rows[rowToCheck][colToCheck];
-    if (getColorofCell(cellToCheck) === color) {
+    if (getColorOfCell(cellToCheck) === color) {
       winningCells.push(cellToCheck);
       rowToCheck++;
     } else {
       break;
     }
   }
-
   isWinningCombo = checkWinningCells(winningCells);
   if (isWinningCombo) return;
 
-  
-};
+  // Check diagonally /
+  winningCells = [cell];
+  rowToCheck = rowIndex + 1;
+  colToCheck = colIndex - 1;
+  while (colToCheck >= 0 && rowToCheck <= 5) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorOfCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      rowToCheck++;
+      colToCheck--;
+    } else {
+      break;
+    }
+  }
+  rowToCheck = rowIndex - 1;
+  colToCheck = colIndex + 1;
+  while (colToCheck <= 6 && rowToCheck >= 0) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorOfCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      rowToCheck--;
+      colToCheck++;
+    } else {
+      break;
+    }
+  }
+  isWinningCombo = checkWinningCells(winningCells);
+  if (isWinningCombo) return;
 
-// check diagonally
-winningCells = [cell];
-rowToCheck = rowIndex + 1;
-colToCheck = colIndex - 1;
-while (colToCheck >= 0 && rowToCheck <= 5) {
-  const cellToCheck = rows[rowToCheck][colToCheck];
-  if (getColorofCell(cellToCheck) === color) {
-    winningCells.push(cellToCheck);
-    rowToCheck++;
-    colToCheck--;
-  } else {
-    break;
+  // Check diagonally \
+  winningCells = [cell];
+  rowToCheck = rowIndex - 1;
+  colToCheck = colIndex - 1;
+  while (colToCheck >= 0 && rowToCheck >= 0) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorOfCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      rowToCheck--;
+      colToCheck--;
+    } else {
+      break;
+    }
   }
-}
-rowToCheck = rowIndex - 1;
-colToCheck = colIndex + 1;
-while (colToCheck <= 6 && rowToCheck >= 0) {
-  const cellToCheck = rows[rowToCheck][colToCheck];
-  if (getColorofCell(cellToCheck) === color) {
-    winningCells.push(cellToCheck);
-    rowToCheck--;
-    colToCheck++;
-  } else {
-    break;
+  rowToCheck = rowIndex + 1;
+  colToCheck = colIndex + 1;
+  while (colToCheck <= 6 && rowToCheck <= 5) {
+    const cellToCheck = rows[rowToCheck][colToCheck];
+    if (getColorOfCell(cellToCheck) === color) {
+      winningCells.push(cellToCheck);
+      rowToCheck++;
+      colToCheck++;
+    } else {
+      break;
+    }
   }
-}
-isWinningCombo = checkWinningCells(winningCells);
-if (isWinningCombo) return;
-};
-if (winningCells.length > 4) {
+  isWinningCombo = checkWinningCells(winningCells);
+  if (isWinningCombo) return;
+
+  // Check to see if we have a tie
+  const rowsWithoutTop = rows.slice(0, 6);
+  for (const row of rowsWithoutTop) {
+    for (const cell of row) {
+      const classList = getClassListArray(cell);
+      if (!classList.includes('yellow') && !classList.includes('red')) {
+        return;
+      }
+    }
+  }
+
   gameIsLive = false;
-}
+  statusSpan.textContent = 'Game is a tie!';
+};
 
-//event handlers
+// Event Handlers
 const handleCellMouseOver = (e) => {
   if (!gameIsLive) return;
   const cell = e.target;
@@ -318,7 +353,6 @@ const handleCellClick = (e) => {
   if (!openCell) return;
 
   openCell.classList.add(yellowIsNext ? 'yellow' : 'red');
-
   checkStatusOfGame(openCell);
 
   yellowIsNext = !yellowIsNext;
@@ -329,7 +363,7 @@ const handleCellClick = (e) => {
   }
 };
 
-//adding event listeners
+// Adding Event Listeners
 for (const row of rows) {
   for (const cell of row) {
     cell.addEventListener('mouseover', handleCellMouseOver);
@@ -337,6 +371,7 @@ for (const row of rows) {
     cell.addEventListener('click', handleCellClick);
   }
 }
+
 resetButton.addEventListener('click', () => {
   for (const row of rows) {
     for (const cell of row) {
