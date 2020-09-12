@@ -47,14 +47,15 @@ h1 {
 }
 
 .cell:not(.row-top).red::after {
-  background: red;
+  background-image: '😀';
+  background: rgb(211, 97, 182);
 }
 .cell:not(.row-top).yellow::after {
   background: yellow;
 }
 
 .cell:not(.row-top).red.win {
-  background: red;
+  background: rgb(211, 97, 182);
 }
 
 .cell:not(.row-top).yellow.win {
@@ -70,7 +71,7 @@ h1 {
 }
 
 .cell.row-top.red::after {
-  background: red;
+  background: rgb(211, 97, 182);
   border: 3px solid black;
 }
 
