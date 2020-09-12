@@ -233,6 +233,7 @@ const checkStatusOfGame = (cell) => {
 
 //event handlers
 const handleCellMouseOver = (e) => {
+  if (!gameIsLive) return;
   const cell = e.target;
   const [rowIndex, colIndex] = getCellLocation(cell);
 
@@ -247,6 +248,7 @@ const handleCellMouseOut = (e) => {
 };
 
 const handleCellClick = (e) => {
+  if (!gameIsLive) return;
   const cell = e.target;
   const [rowIndex, colIndex] = getCellLocation(cell);
 
