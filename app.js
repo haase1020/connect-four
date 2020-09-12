@@ -193,7 +193,9 @@ const checkWinningCells = (cells) => {
   for (const cell of cells) {
     cell.classList.add('win');
   }
-  statusSpan.textContent = `${yellowIsNext ? 'Yellow' : 'Red'} has won!`;
+  alert(
+    (statusSpan.textContent = `${yellowIsNext ? 'Yellow' : 'Red'} has won!`)
+  );
   return true;
 };
 
@@ -324,7 +326,7 @@ const checkStatusOfGame = (cell) => {
   }
 
   gameIsLive = false;
-  statusSpan.textContent = 'Game is a tie!';
+  alert((statusSpan.textContent = 'Game is a tie!'));
 };
 
 // Event Handlers

@@ -15,7 +15,12 @@ body {
 }
 
 h1 {
+  font-family: 'Grandstander', cursive;
   text-transform: uppercase;
+  font-size: 50px;
+  color: #4370f1;
+  -webkit-text-stroke: 2px black;
+  text-shadow: 2px 2px 4px black;
 }
 
 .game-board {
@@ -47,19 +52,42 @@ h1 {
 }
 
 .cell:not(.row-top).red::after {
-  background-image: '😀';
-  background: rgb(211, 97, 182);
+  background: linear-gradient(
+    to bottom,
+    #fcecfc 0%,
+    #fba6e1 50%,
+    #fd89d7 51%,
+    #ff7cd8 100%
+  );
 }
 .cell:not(.row-top).yellow::after {
-  background: yellow;
+  background: linear-gradient(
+    to bottom,
+    #e8cb72 0%,
+    #f6f632 50%,
+    #f4fb19 86%,
+    #ffff0f 100%
+  );
 }
 
 .cell:not(.row-top).red.win {
-  background: rgb(211, 97, 182);
+  background: linear-gradient(
+    to bottom,
+    #fcecfc 0%,
+    #fba6e1 50%,
+    #fd89d7 51%,
+    #ff7cd8 100%
+  );
 }
 
 .cell:not(.row-top).yellow.win {
-  background: yellow;
+  background: linear-gradient(
+    to bottom,
+    #e8cb72 0%,
+    #f6f632 50%,
+    #f4fb19 86%,
+    #ffff0f 100%
+  );
 }
 
 .cell.row-top {
@@ -71,12 +99,24 @@ h1 {
 }
 
 .cell.row-top.red::after {
-  background: rgb(211, 97, 182);
+  background: linear-gradient(
+    to bottom,
+    #fcecfc 0%,
+    #fba6e1 50%,
+    #fd89d7 51%,
+    #ff7cd8 100%
+  );
   border: 3px solid black;
 }
 
 .cell.row-top.yellow::after {
-  background: yellow;
+  background: linear-gradient(
+    to bottom,
+    #e8cb72 0%,
+    #f6f632 50%,
+    #f4fb19 86%,
+    #ffff0f 100%
+  );
   border: 3px solid black;
 }
 
@@ -111,6 +151,7 @@ h1 {
 .status {
   display: block;
   font-size: 20px;
+  font-family: 'Grandstander', cursive;
 }
 
 /* Util CSS */
